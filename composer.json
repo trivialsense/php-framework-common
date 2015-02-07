@@ -1,0 +1,31 @@
+{
+    "name": "trivialsense/php-framework-common",
+    "description": "PHP Libraries",
+
+    "autoload": {
+        "psr-0": {
+            "TrivialSense": [
+                "src/",
+                "tests/"
+            ]
+        }
+    },
+
+    "require": {
+        "php": ">=5.4",
+        "symfony/symfony": "~2.6",
+        "doctrine/orm": "~2.2,>=2.2.3,<2.5",
+        "doctrine/dbal": "<2.5",
+        "doctrine/doctrine-bundle": "~1.2",
+        "doctrine/doctrine-fixtures-bundle": ">=2.2.0",
+        "liip/functional-test-bundle": "dev-master",
+        "antimattr/google-bundle": "dev-master",
+        "presta/sitemap-bundle": "dev-master"
+    },
+
+    "require-dev": {
+	    "phpunit/phpunit": "4.1.*"
+    },
+
+    "minimum-stability": "stable"
+}

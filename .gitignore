@@ -1,0 +1,5 @@
+vendor/
+/tests/bootstrap.php.cache
+/tests/cache/*
+/tests/logs/*
+/build/

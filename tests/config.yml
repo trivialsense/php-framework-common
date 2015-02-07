@@ -1,0 +1,61 @@
+parameters:
+    test: testing_this
+
+framework:
+    translator:      { fallback: en }
+    secret:          784yjh0uh0fbha9
+    router:
+        resource: "%kernel.root_dir%/routing.yml"
+        strict_requirements: ~
+    form:            ~
+    csrf_protection: false
+    validation:      { enable_annotations: true }
+    templating:
+        engines: ['twig']
+    default_locale:  "en"
+    trusted_proxies: ~
+    session:
+          storage_id: session.storage.filesystem
+    fragments: ~
+    test: ~
+
+doctrine:
+    dbal:
+        default_connection: default
+        connections:
+            default:
+                driver:   pdo_sqlite
+                path:     %kernel.cache_dir%/test.db
+    orm:
+        auto_generate_proxy_classes: %kernel.debug%
+        entity_managers:
+            default:
+                mappings:
+                    FrameworkCommonTestBundle:
+                        mapping: true
+            test:
+                mappings:
+                    FrameworkCommonTestBundle:
+                        mapping: true
+security:
+    providers:
+        default:
+            memory:
+                users:
+                    test:
+                        password:           test
+                        roles:              ROLE_TEST
+    firewalls:
+        main:
+            http_digest:
+                     key: "a_random_string"
+                     realm: "secure-api"
+
+liip_functional_test:
+    cache_sqlite_db: true
+
+google:
+    analytics:
+        trackers:
+            default: ~
+            test: ~

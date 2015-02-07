@@ -1,0 +1,7 @@
+test_route:
+    path:      /test/test
+    defaults:  { _controller: FrameworkCommonTestBundle:Test:test }
+
+test_route_params:
+    path: /test/testparam/{param}
+    defaults: { _controller: FrameworkCommonTestBundle:Test:testParam }
