@@ -31,7 +31,7 @@ class GoogleHelperTraitTest extends FunctionalTest
         parent::setUpBeforeClass();
 
         self::$controller = new MockupGoogleHelper();
-        self::$controller->setContainer(self::getContainer());
+        self::$controller->setContainer(self::getContainerStatic());
     }
 
     public function testGetAnalytics()

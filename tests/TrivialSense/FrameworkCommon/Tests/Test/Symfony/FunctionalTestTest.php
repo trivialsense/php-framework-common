@@ -17,9 +17,9 @@ class FunctionalTestTest extends FunctionalTest
 {
     public function testRunCommand()
     {
-        $result = $this->runCommand("trivialsense:test", false);
+        $result = $this->runCommand("trivialsense:test");
 
-        $this->assertEquals(0, $result);
+        $this->assertEquals('', $result);
     }
 
     public function testLoadFixtures()

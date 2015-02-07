@@ -129,7 +129,7 @@ class ContainerHelperTraitTest extends FunctionalTest
     {
         $this->loginAnonymousUser(array("ROLE_EXAMPLE"));
 
-        $granted = $this->isGranted("ROLE_EXAMPLE");
+        $granted = $this->isGrantedRole("ROLE_EXAMPLE");
 
         $this->assertTrue($granted);
     }
@@ -140,7 +140,7 @@ class ContainerHelperTraitTest extends FunctionalTest
 
         $this->loginUser($dummyUser);
 
-        $granted = $this->isGranted("ROLE_CUSTOM");
+        $granted = $this->isGrantedRole("ROLE_CUSTOM");
 
         $this->assertTrue($granted);
     }

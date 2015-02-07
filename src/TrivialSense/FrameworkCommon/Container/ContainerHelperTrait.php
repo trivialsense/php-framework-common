@@ -153,7 +153,7 @@ trait ContainerHelperTrait
      *
      * @return bool
      */
-    public function isGranted($role)
+    public function isGrantedRole($role)
     {
         return $this->getSecurityContext()->isGranted($role);
     }

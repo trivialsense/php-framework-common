@@ -11,6 +11,8 @@
 
 namespace TrivialSense\FrameworkCommon\Test\Symfony;
 
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\StreamOutput;
 use TrivialSense\FrameworkCommon\Container\ContainerHelperInterface;
 use TrivialSense\FrameworkCommon\Container\ContainerHelperTrait;
 use TrivialSense\FrameworkCommon\Test\File\DummyFile;
@@ -19,7 +21,6 @@ use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Liip\FunctionalTestBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
-use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -52,15 +53,29 @@ abstract class FunctionalTest extends WebTestCase
     protected static $container;
 
     /**
-     * @param $command
-     *
+     * @param $name
+     * @param array $params
      * @return int Command exit code
+     * @throws \Exception
+     *
      */
-    private static function runCommandStatic($command)
+    private static function runCommandStatic($name, array $params = array())
     {
-        $command = sprintf('%s --quiet', $command);
+        array_unshift($params, $name);
 
-        return self::getApplication()->run(new StringInput($command));
+        $input = new ArrayInput($params);
+        $input->setInteractive(false);
+
+        $fp = fopen('php://temp/maxmemory', 'r+');
+        $output = new StreamOutput($fp);
+
+        self::getApplication()->run($input, $output);
+
+        rewind($fp);
+
+        $returnOutput = stream_get_contents($fp);
+
+        return $returnOutput;
     }
 
     /**
@@ -85,7 +100,7 @@ abstract class FunctionalTest extends WebTestCase
     {
         if (static::hasDatabaseEntities()) {
             self::runCommandStatic('doctrine:database:create');
-            self::runCommandStatic('doctrine:schema:update --force');
+            self::runCommandStatic('doctrine:schema:update', array('--force' => true));
         }
 
         // create Symfony2 client
@@ -99,7 +114,7 @@ abstract class FunctionalTest extends WebTestCase
     public static function tearDownAfterClass()
     {
         if (static::hasDatabaseEntities()) {
-            self::runCommandStatic('doctrine:database:drop --env=test --force');
+            self::runCommandStatic('doctrine:database:drop', array('--env' => 'test', '--force' => true));
         }
 
         if (null !== static::$kernel) {
@@ -108,19 +123,28 @@ abstract class FunctionalTest extends WebTestCase
     }
 
     /**
-     * @param string $command
-     *
+     * @param string $name
+     * @param array $params
+     * @param bool $reuseKernel
      * @return int Command exit code
      */
-    protected function runCommand($command)
+    protected function runCommand($name, array $params = array(), $reuseKernel = false)
     {
-        return self::runCommandStatic($command);
+        return self::runCommandStatic($name, $params);
     }
 
     /**
      * @return ContainerInterface
      */
     protected function getContainer()
+    {
+        return self::$container;
+    }
+
+    /**
+     * @return ContainerInterface
+     */
+    protected static function getContainerStatic()
     {
         return self::$container;
     }
