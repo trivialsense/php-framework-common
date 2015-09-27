@@ -30,9 +30,21 @@ class AbstractControllerTest extends FunctionalTest
 
         self::$controller = new MockupAbstractController();
         self::$controller->setContainer(self::$container);
+    }
+
+    protected function setUp()
+    {
+        parent::setUp();
 
         self::$container->enterScope("request");
         self::$container->set("request", new Request());
+    }
+
+    protected function tearDown()
+    {
+        self::$container->leaveScope('request');
+
+        parent::tearDown();
     }
 
     public function testSetupControllerIsCalled()
@@ -94,23 +106,6 @@ class AbstractControllerTest extends FunctionalTest
         $this->getRequest()->setMethod("POST");
 
         $this->assertTrue($this->getController()->isPost());
-    }
-
-    public function testIsMethod()
-    {
-        $methods = array(
-            "GET",
-            "POST",
-            "PUT",
-            "DELETE"
-        );
-
-        foreach($methods as $method)
-        {
-            $this->getRequest()->setMethod($method);
-
-            $this->assertTrue($this->getController()->isMethod($method), "Failed testing isMethod for method: '" .$method. "'");
-        }
     }
 
     public function testCreateAndSubmitFormSimpleType()
