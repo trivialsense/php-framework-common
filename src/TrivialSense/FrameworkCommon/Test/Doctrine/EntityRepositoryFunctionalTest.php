@@ -29,7 +29,7 @@ abstract class EntityRepositoryFunctionalTest extends FunctionalTest
             ->getManager(static::getTestedEntityManager())->getRepository(static::getTestedRepositoryName());
     }
 
-    protected function loadFixtures($classNames, $omName = null, $registryName = 'doctrine', $purgeMode = null)
+    protected function loadFixtures(array $classNames, $omName = null, $registryName = 'doctrine', $purgeMode = null)
     {
         if(!is_array($classNames))
             $classNames = array($classNames);
@@ -63,5 +63,8 @@ abstract class EntityRepositoryFunctionalTest extends FunctionalTest
         return true;
     }
 
-    abstract protected static function getTestedRepositoryName();
+    protected static function getTestedRepositoryName()
+    {
+        return '';
+    }
 }

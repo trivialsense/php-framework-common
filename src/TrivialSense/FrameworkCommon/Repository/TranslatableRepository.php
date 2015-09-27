@@ -16,6 +16,8 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query;
 use Symfony\Component\HttpFoundation\RequestStack;
+use JMS\DiExtraBundle\Annotation as DI;
+use Gedmo\Translatable\TranslatableListener;
 
 /**
  * Class TranslatableRepository
