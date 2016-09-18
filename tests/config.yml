@@ -48,8 +48,8 @@ security:
     firewalls:
         main:
             http_digest:
-                     key: "a_random_string"
-                     realm: "secure-api"
+                provider: default
+                secret: "test"
 
 liip_functional_test:
     cache_sqlite_db: true

@@ -11,6 +11,7 @@
 
 namespace TrivialSense\FrameworkCommon\Tests\Container;
 
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\SecurityContext;
 use TrivialSense\FrameworkCommon\Controller\AbstractController;
 use TrivialSense\FrameworkCommon\Test\Security\DummyUser;
@@ -120,9 +121,9 @@ class ContainerHelperTraitTest extends FunctionalTest
 
     public function testGetService()
     {
-        $service = $this->getController()->getService("security.context");
+        $service = $this->getController()->getService("security.token_storage");
 
-        $this->assertTrue($service instanceof SecurityContext);
+        $this->assertTrue($service instanceof TokenStorage);
     }
 
     public function testIsGrantedAnonymousUser()
@@ -169,7 +170,6 @@ class ContainerHelperTraitTest extends FunctionalTest
     public function testGetRequest()
     {
         $dummyRequest = Request::createFromGlobals();
-        $this->getContainer()->enterScope("request");
         $this->getContainer()->set("request", $dummyRequest);
 
         $request = $this->getRequest();

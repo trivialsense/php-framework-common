@@ -34,17 +34,13 @@ class AbstractControllerTest extends FunctionalTest
 
     protected function setUp()
     {
-        parent::setUp();
+        static::createKernel();
 
-        self::$container->enterScope("request");
         self::$container->set("request", new Request());
     }
 
     protected function tearDown()
     {
-        self::$container->leaveScope('request');
-
-        parent::tearDown();
     }
 
     public function testSetupControllerIsCalled()
@@ -55,11 +51,9 @@ class AbstractControllerTest extends FunctionalTest
 
     public function testGetServiceShorcut()
     {
-        $service = $this->get("security.context");
+        $service = $this->get("security.token_storage");
 
-        $this->assertTrue($service instanceof SecurityContext);
-
-        $serviceBis = $this->get("security.context");
+        $serviceBis = $this->get("security.token_storage");
 
         $this->assertTrue($service === $serviceBis);
     }
@@ -110,9 +104,9 @@ class AbstractControllerTest extends FunctionalTest
 
     public function testCreateAndSubmitFormSimpleType()
     {
-        $view = $this->getController()->createAndSubmitForm(new DummyType());
+        $view = $this->getController()->createAndSubmitForm(DummyType::class);
 
-        $this->assertEquals("dummy_type", $view->vars['id']);
+        $this->assertEquals("dummy", $view->vars['id']);
     }
 
     public function testCreateAndSubmitFormSubmitCallback()
@@ -125,13 +119,11 @@ class AbstractControllerTest extends FunctionalTest
         $data = new \stdClass();
         $data->dummy = "test";
 
-        $type = new DummyType();
-
         // make post request
         $this->getRequest()->setMethod("POST");
-        $this->getRequest()->request->set("dummy_type", "");
+        $this->getRequest()->request->set("dummy", "");
 
-        $this->getController()->createAndSubmitForm($type, $data, $callback);
+        $this->getController()->createAndSubmitForm(DummyType::class, $data, $callback);
     }
 
     /**
@@ -155,12 +147,4 @@ class MockupAbstractController extends AbstractController
 
 class DummyType extends AbstractType
 {
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getName()
-    {
-        return 'dummy_type';
-    }
 }

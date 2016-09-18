@@ -17,6 +17,8 @@ use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Router;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Core\SecurityContext;
 
 /**
@@ -155,15 +157,23 @@ trait ContainerHelperTrait
      */
     public function isGrantedRole($role)
     {
-        return $this->getSecurityContext()->isGranted($role);
+        return $this->getAuthorizationChecker()->isGranted($role);
     }
 
     /**
-     * @return SecurityContext
+     * @return AuthorizationChecker
      */
-    public function getSecurityContext()
+    public function getAuthorizationChecker()
     {
-        return $this->get("security.context");
+        return $this->get("security.authorization_checker");
+    }
+
+    /**
+     * @return TokenStorage
+     */
+    public function getTokenStorage()
+    {
+        return $this->get('security.token_storage');
     }
 
     /**

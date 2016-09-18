@@ -103,7 +103,6 @@ abstract class FunctionalTest extends WebTestCase
             self::runCommandStatic('doctrine:schema:update', array('--force' => true));
         }
 
-        // create Symfony2 client
         self::$client = static::createClient();
         self::$container = self::$client->getContainer();
     }
@@ -209,7 +208,7 @@ abstract class FunctionalTest extends WebTestCase
     {
         $token = new UsernamePasswordToken($user, $user->getPassword(), $firewall, $user->getRoles());
 
-        $this->getSecurityContext()->setToken($token);
+        $this->getTokenStorage()->setToken($token);
 
         return $token;
     }
@@ -337,7 +336,7 @@ abstract class FunctionalTest extends WebTestCase
     protected function loginAnonymousUser($roles = array())
     {
         $token = new AnonymousToken("anon", "anon", $roles);
-        $this->getSecurityContext()->setToken($token);
+        $this->getTokenStorage()->setToken($token);
 
         return $token;
     }
